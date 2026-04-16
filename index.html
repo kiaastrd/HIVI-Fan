@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HiVi! - Digital Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --biru-bg: #b0d4f1; 
+            --biru-tombol: #7fb5e3;
+            --biru-footer: #4a6fa5; 
+            --teks-gelap: #2c3e50;
+            --putih-transparant: rgba(255, 255, 255, 0.4);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--biru-bg);
+            color: var(--teks-gelap);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container { flex: 1; width: 100%; max-width: 450px; margin: auto; padding: 30px 20px; }
+
+        h1.logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            text-align: center;
+            letter-spacing: 3px;
+            margin-bottom: 30px;
+            color: var(--teks-gelap);
+        }
+
+        .page { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .card { background: var(--putih-transparant); padding: 25px; border-radius: 20px; backdrop-filter: blur(8px); margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.3); }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #fff; outline: none; background: rgba(255,255,255,0.7); }
+        
+        .menu-list { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+        .menu-btn {
+            width: 90%;
+            padding: 16px;
+            background-color: var(--biru-tombol);
+            color: white;
+            text-align: center;
+            border-radius: 35px;
+            font-weight: 600;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .menu-btn:active { transform: scale(0.96); }
+
+        /* Profil Section */
+        .profile-header { text-align: center; margin-bottom: 20px; }
+        .img-circle-lg { width: 160px; height: 160px; border-radius: 50%; object-fit: cover; border: 5px solid #fff; margin: 0 auto; display: block; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .profile-details { text-align: left; margin-top: 10px; }
+        .profile-details p { margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.4); font-size: 14px; }
+
+        /* List Vertical Layout */
+        .list-vertical { display: flex; flex-direction: column; gap: 20px; }
+        .item-card { background: var(--putih-transparant); padding: 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.2); }
+        .img-full { width: 100%; border-radius: 15px; margin-bottom: 12px; display: block; }
+        .img-circle-sm { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #fff; flex-shrink: 0; }
+        
+        .album-title { font-weight: 600; font-size: 18px; text-align: center; margin-top: 5px; }
+        .album-year { font-size: 14px; color: #555; text-align: center; font-style: italic; }
+
+        footer {
+            background-color: var(--biru-footer);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            font-size: 13px;
+            margin-top: 30px;
+        }
+
+        .back-btn { background: #5a7d9a; width: auto; padding: 10px 30px; margin-top: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <div id="page-select-login" class="page active">
+        <h1 class="logo">HIVI!</h1>
+        <div class="menu-list">
+            <button class="menu-btn" onclick="showPage('page-login-admin')">Login Admin</button>
+            <button class="menu-btn" onclick="showPage('page-register-user')">Register Pengunjung</button>
+        </div>
+    </div>
+
+    <div id="page-login-admin" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Admin Login</h2>
+        <div class="card">
+            <input type="text" id="admin-user" placeholder="Username">
+            <input type="password" id="admin-pass" placeholder="Password">
+            <button class="menu-btn" style="width:100%" onclick="loginAdmin()">Masuk</button>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-select-login')">Batal</button></center>
+    </div>
+
+    <div id="page-register-user" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Register</h2>
+        <div class="card">
+            <input type="text" id="reg-nama" placeholder="Nama Lengkap">
+            <input type="email" id="reg-email" placeholder="Email Aktif">
+            <button class="menu-btn" style="width:100%" onclick="registerUser()">Daftar & Login</button>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-select-login')">Batal</button></center>
+    </div>
+
+    <div id="page-home" class="page">
+        <h1 class="logo">HIVI!</h1>
+        <div class="menu-list">
+            <button class="menu-btn" onclick="showPage('page-profil')">Profil</button>
+            <button class="menu-btn" onclick="showPage('page-tentang')">Tentang</button>
+            <button class="menu-btn" onclick="showPage('page-anggota')">Anggota</button>
+            <button class="menu-btn" onclick="showPage('page-album')">Album HiVi!</button>
+            <button class="menu-btn" onclick="showPage('page-lagu')">Daftar Lagu</button>
+            <button class="menu-btn" onclick="showPage('page-galeri')">Galeri</button>
+            <button class="menu-btn" style="background:#d9534f; margin-top:10px;" onclick="location.reload()">Logout</button>
+        </div>
+    </div>
+
+    <div id="page-profil" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Profil Pembuat</h2>
+        <div class="card">
+            <div class="profile-header">
+                <img src="profil.jpg" class="img-circle-lg" alt="Zaskia Photo">
+            </div>
+            <div class="profile-details">
+                <p><b>Nama:</b> Zaskia Dwi Ananda Firna</p>
+                <p><b>Kelas:</b> XI.10</p>
+                <p><b>Sekolah:</b> SMAN 5 Cimahi</p>
+                <p><b>Jenis Kelamin:</b> Perempuan</p>
+                <p><b>Email:</b> zaskiafirna@gmail.com</p>
+            </div>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+    <div id="page-tentang" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Tentang HIVI!</h2>
+        <div class="card" style="font-size:14px; text-align:justify; line-height:1.7;">
+            <p>HIVI! adalah grup musik pop asal Indonesia yang dibentuk pada tahun 2009 di Jakarta. Nama HIVI! merupakan singkatan dari "Have Infinite Vision and Imagination", yang berarti memiliki visi dan imajinasi tanpa batas. Nama ini mencerminkan semangat para anggotanya untuk terus berkarya, berinovasi, dan menciptakan musik yang dapat dinikmati oleh banyak orang. Sejak awal kemunculannya, HIVI! hadir dengan konsep musik pop yang ringan, romantis, dan penuh makna, sehingga mudah diterima oleh masyarakat, khususnya kalangan remaja dan anak muda.</p><br>
+
+            <p>HIVI! dibentuk oleh sekelompok musisi muda yang memiliki kecintaan terhadap musik dan keinginan untuk menciptakan karya bersama. Mereka memulai perjalanan musiknya dari panggung-panggung kecil hingga akhirnya dikenal secara luas oleh masyarakat Indonesia. Dengan kerja keras, konsistensi, dan dedikasi yang tinggi, HIVI! berhasil membangun identitas mereka sebagai grup musik pop yang memiliki ciri khas tersendiri. Musik mereka sering menggambarkan cerita tentang cinta, persahabatan, kehidupan, dan berbagai perasaan yang dialami oleh banyak orang secara jujur dan mendalam.</p><br>
+
+            <p>Keunikan HIVI! terletak pada gaya musik mereka yang lembut, harmonis, dan emosional. Aransemen musik yang mereka gunakan cenderung sederhana namun tetap indah dan berkesan bagi para pendengar. Selain itu, lirik lagu HIVI! juga dikenal puitis, jujur, dan mudah dipahami, yang membuat banyak orang merasa terhubung secara emosional. Lagu-lagu HIVI! sering kali menjadi soundtrack dalam berbagai momen penting kehidupan, mulai dari indahnya jatuh cinta, kebahagiaan bersama sahabat, hingga kenangan-kenangan manis lainnya yang sulit dilupakan.</p><br>
+
+            <p>Seiring berjalannya waktu, HIVI! berhasil merilis berbagai lagu populer yang mendapatkan respon positif luar biasa dari masyarakat. Beberapa karya mereka menjadi sangat terkenal dan sering diputar di berbagai radio serta platform musik digital di seluruh Indonesia. Lagu-lagu seperti "Siapkah Kau Tuk Jatuh Cinta Lagi", "Remaja", "Pelangi", "Indahnya Dirimu", dan "Kereta Kencan" merupakan contoh nyata dari kemampuan mereka menciptakan musik yang tidak hanya enak didengar, tetapi juga mampu memberikan warna tersendiri bagi perkembangan industri musik tanah air.</p><br>
+
+            <p>Selain merilis album yang menunjukkan perkembangan musikalitas mereka, HIVI! juga sangat aktif tampil dalam berbagai konser dan festival musik besar. Penampilan mereka selalu dinantikan karena mampu menghadirkan suasana yang hangat, menyenangkan, dan penuh emosi melalui interaksi yang akrab dengan penonton. Sepanjang kariernya, berbagai penghargaan dan apresiasi telah mereka terima, yang menunjukkan bahwa dedikasi mereka diakui secara luas. Hingga saat ini, HIVI! terus berkarya dengan semangat konsistensi yang tinggi demi menghadirkan inspirasi melalui keindahan nada bagi setiap penggemar setianya.</p>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+    <div id="page-anggota" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Personel</h2>
+        <div class="list-vertical">
+            <div class="item-card" style="display:flex; align-items:center; gap:20px;">
+                <img src="keisha.jpg" class="img-circle-sm">
+                <div>
+                    <h4 style="font-size:16px;">Keisha Cinantya</h4>
+                    <p style="font-size:12px;"><b>Vokalis</b><br>Suara lembut yang menjadi jiwa harmoni HIVI!.</p>
+                </div>
+            </div>
+            <div class="item-card" style="display:flex; align-items:center; gap:20px;">
+                <img src="febrian.jpg" class="img-circle-sm">
+                <div>
+                    <h4 style="font-size:16px;">Febrian Nindyo</h4>
+                    <p style="font-size:12px;"><b>Vokal & Gitar</b><br>Pencipta melodi dan lirik-lirik puitis HIVI!.</p>
+                </div>
+            </div>
+            <div class="item-card" style="display:flex; align-items:center; gap:20px;">
+                <img src="ilham.jpg" class="img-circle-sm">
+                <div>
+                    <h4 style="font-size:16px;">Ilham Aditama</h4>
+                    <p style="font-size:12px;"><b>Vokalis</b><br>Membawa energi ceria di setiap penampilan panggung.</p>
+                </div>
+            </div>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+    <div id="page-album" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Album HiVi!</h2>
+        <div class="list-vertical">
+            <div class="item-card">
+                <img src="sayhi.jpg" class="img-full">
+                <div class="album-title">Say Hi To HiVi!</div>
+                <div class="album-year">Tahun Rilis: 2012</div>
+            </div>
+            <div class="item-card">
+                <img src="kereta.jpg" class="img-full">
+                <div class="album-title">Kereta Kencan</div>
+                <div class="album-year">Tahun Rilis: 2017</div>
+            </div>
+            <div class="item-card">
+                <img src="ceritera.jpg" class="img-full">
+                <div class="album-title">Ceritera</div>
+                <div class="album-year">Tahun Rilis: 2019</div>
+            </div>
+            <div class="item-card">
+                <img src="rintik.jpg" class="img-full">
+                <div class="album-title">Bermain Rintik di Musim Hujan</div>
+                <div class="album-year">Tahun Rilis: 2022</div>
+            </div>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+    <div id="page-lagu" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Daftar Lagu Lengkap</h2>
+        <div class="card" style="font-size:13px; max-height:450px; overflow-y:auto;">
+            <p><b>Album: Say Hi To HiVi! (2012)</b></p>
+            <ul style="margin: 5px 0 15px 18px;">
+                <li>Indahnya Dirimu</li><li>Mata Ke Hati</li><li>Orang Ketiga</li><li>Curi-Curi</li><li>Selamanya</li><li>Lihatlah Dunia</li><li>Heartbeat</li>
+            </ul>
+            <p><b>Album: Kereta Kencan (2017)</b></p>
+            <ul style="margin: 5px 0 15px 18px;">
+                <li>Merakit Perahu</li><li>Siapkah Kau 'Tuk Jatuh Cinta Lagi</li><li>Pelangi</li><li>Remaja</li><li>Kereta Kencan</li><li>Gadis Sampul</li><li>Apa Adanya</li><li>Stasiun Keberangkatan</li>
+            </ul>
+            <p><b>Album: Ceritera (2019)</b></p>
+            <ul style="margin: 5px 0 15px 18px;">
+                <li>Selamat Tinggal</li><li>Tersenyum Untuk Siapa</li><li>Bumi dan Bulan</li><li>Satu Teratas</li><li>Musim Hujan</li><li>Pathetic Waltz</li><li>Pemuda</li><li>Jatuh Bangkit Kembali</li>
+            </ul>
+            <p><b>Album: Bermain Rintik di Musim Hujan (2022)</b></p>
+            <ul style="margin: 5px 0 5px 18px;">
+                <li>Memori</li><li>Rintik Hujan</li><li>Jangan di Sini</li><li>Nanti Kita Cerita Tentang Hari Ini</li>
+            </ul>
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+    <div id="page-galeri" class="page">
+        <h2 style="text-align:center; margin-bottom:20px;">Galeri Foto</h2>
+        <div class="list-vertical">
+            <img src="hivi1.jpg" class="img-full" style="border: 4px solid white;">
+            <img src="hivi2.jpg" class="img-full" style="border: 4px solid white;">
+            <img src="hivi3.jpg" class="img-full" style="border: 4px solid white;">
+            <img src="hivi4.jpg" class="img-full" style="border: 4px solid white;">
+        </div>
+        <center><button class="menu-btn back-btn" onclick="showPage('page-home')">Kembali</button></center>
+    </div>
+
+</div>
+
+<footer>
+    Web Statis HIVI!<br>
+    Dibuat oleh Zaskia Dwi Ananda Firna XI.10
+</footer>
+
+<script>
+    function showPage(id) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        window.scrollTo(0,0);
+    }
+
+    function loginAdmin() {
+        const u = document.getElementById('admin-user').value;
+        const p = document.getElementById('admin-pass').value;
+        if(u === 'zaskia' && p === 'zaskia0812') {
+            showPage('page-home');
+        } else {
+            alert('Akses Gagal!');
+        }
+    }
+
+    function registerUser() {
+        const n = document.getElementById('reg-nama').value;
+        const e = document.getElementById('reg-email').value;
+        if(n && e) {
+            alert('Sukses!\nUser: ' + n + '\nPass: ' + n + '2026');
+            showPage('page-home');
+        } else {
+            alert('Data kosong!');
+        }
+    }
+</script>
+
+</body>
+</html>
